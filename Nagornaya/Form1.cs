@@ -51,8 +51,9 @@ namespace Nagornaya
             Column13.Items.Clear();
             Column5.Items.Add("");
 
-            if (!File.Exists("Peoples.txt"))
-                File.Create("Peoples.txt");
+            FileInfo fi1 = new FileInfo("Peoples.txt");
+            if (!fi1.Exists)
+                using (StreamWriter sw = fi1.CreateText()) ;
 
             int index = 0;
             using (StreamReader sr = new StreamReader("Peoples.txt"))
@@ -111,6 +112,13 @@ namespace Nagornaya
         }
         private void openFile(string fileName)
         {
+            if (fileName is null)
+                return;
+
+            FileInfo fi1 = new FileInfo(fileName);
+            if (!fi1.Exists)
+                using (StreamWriter sw = fi1.CreateText()) ;
+
             StreamReader sr = new StreamReader(fileName);
 
             currentFilename = fileName;
@@ -133,7 +141,7 @@ namespace Nagornaya
                 for (int i = 0; i < addThisPeople.Count; i++)
                 {
                     sw.WriteLine(addThisPeople[i]);
-                    peoples += addThisPeople[i]+"; ";
+                    peoples += addThisPeople[i] + "; ";
                 }
                 sw.Close();
                 MessageBox.Show("Некоторые люди отсутстовали в файле Peoples.txt, Они были автоматически добавлены: " + peoples);
@@ -184,8 +192,9 @@ namespace Nagornaya
         }
         private string readLastFileName()
         {
-            if (!File.Exists("Settings.txt"))
-                File.Create("Settings.txt");
+            FileInfo fi1 = new FileInfo("Settings.txt");
+            if (!fi1.Exists)
+                using (StreamWriter sw = fi1.CreateText()) ;
 
             StreamReader sr = new StreamReader("Settings.txt");
             string fileName = sr.ReadLine();
@@ -495,9 +504,17 @@ namespace Nagornaya
         }
         private void m_addAllMoney(object sender, System.EventArgs e)
         {
+            //Хз что я сделал, но всё работает так. Оставлю.
             dgvMoney.RowCount = Column5.Items.Count;
-            for (int i = 0; i < dgvMoney.RowCount - 1; i++)
-                dgvMoney.Rows[i].Cells[0].Value = Column5.Items[i];
+            int k = 0;
+            for (int i = 0; i < dgvMoney.RowCount; i++)
+            {
+                if (Column5.Items[i].ToString() != "")
+                {
+                    dgvMoney.Rows[k].Cells[0].Value = Column5.Items[i];
+                    k++;
+                }
+            }
         }
         #endregion
 
