@@ -12,8 +12,10 @@ namespace Nagornaya
 {
     public partial class howTo : Form
     {
-        public howTo()
+        private int maxLen = 10;
+        public howTo(int maxLen)
         {
+            this.maxLen = maxLen;
             InitializeComponent();
         }
 
@@ -23,12 +25,14 @@ namespace Nagornaya
         }
         public void addRow(String user1,String strelka, String user2,String money)
         {
-            while (user1.Length != 8)
+            while (user1.Length < maxLen+1)
                 user1 += " ";
-            while (user2.Length != 8)
+            while (user2.Length < maxLen+1)
                 user2 += " ";
 
             richTextBox1.AppendText(user1+strelka+ user2 + money + Environment.NewLine);
+            Height += 22;
+            
         }
     }
 }
